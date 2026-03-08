@@ -74,21 +74,21 @@
   * { @apply border-border; }
   body {
     @apply bg-background text-foreground;
-    font-family: 'EB Garamond', 'Noto Serif SC', Georgia, serif;
+    font-family: 'Lora', 'Noto Serif SC', Georgia, serif;
     -webkit-font-smoothing: antialiased;
     letter-spacing: 0.01em;
   }
   h1, h2, h3, h4 {
-    font-family: 'Cormorant Garamond', 'Noto Serif SC', Georgia, serif;
+    font-family: 'Playfair Display', 'Noto Serif SC', Georgia, serif;
   }
 }
 
 @layer utilities {
   .font-display {
-    font-family: 'Cormorant Garamond', 'Noto Serif SC', Georgia, serif;
+    font-family: 'Playfair Display', 'Noto Serif SC', Georgia, serif;
   }
   .font-body {
-    font-family: 'EB Garamond', 'Noto Serif SC', Georgia, serif;
+    font-family: 'Lora', 'Noto Serif SC', Georgia, serif;
   }
 
   /* Hermès-style full-bleed image sections */
