@@ -100,7 +100,7 @@
 
   /* Thin uppercase label */
   .label-sm {
-    font-family: 'EB Garamond', serif;
+    font-family: 'Lora', 'Noto Serif SC', serif;
     font-size: 0.65rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
