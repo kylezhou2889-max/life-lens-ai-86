@@ -79,7 +79,7 @@ export default function ProductStory() {
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
           <p className="label-sm text-on-dark/60 mb-5">第 三 章</p>
           <h3 className="font-display text-[clamp(2.5rem,5.5vw,5rem)] font-light italic text-on-dark leading-[1.1] mb-5">
-            AI 陪你看见<br />目标与现实的距离
+            陪你看见<br />目标与现实的距离
           </h3>
           <p className="font-body text-sm text-on-dark/75 max-w-sm leading-relaxed">
             不评判，只是温柔地照亮前路。
