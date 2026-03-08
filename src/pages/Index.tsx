@@ -8,7 +8,7 @@ export default function Index() {
   return (
     <div className="min-h-screen">
       <LandingNav />
-      <main className="pt-16">
+      <main>
         <Hero />
         <ProductStory />
         <Demo />

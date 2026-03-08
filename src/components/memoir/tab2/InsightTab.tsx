@@ -37,7 +37,15 @@ export default function InsightTab({ data, onUpdate }: InsightTabProps) {
       });
 
       const goals = data.goals.filter(g => g.year === selectedYear);
-      const raw = await generateInsight({ diaries, goals, period, periodType });
+      const raw = await generateInsight({
+        diaries,
+        goals,
+        period,
+        periodType,
+        health: data.health,
+        assets: data.assets,
+        travel: data.travel,
+      });
 
       const record: InsightRecord = {
         id: crypto.randomUUID(),
