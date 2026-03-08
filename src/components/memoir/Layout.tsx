@@ -1,16 +1,14 @@
-import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
 
 const tabs = [
-  { id: 'goals', label: '目标', icon: '✦', step: '01' },
-  { id: 'diary', label: '日记', icon: '📝', step: '02' },
-  { id: 'insight', label: '洞察', icon: '◈', step: '03' },
-  { id: 'health', label: '健康', icon: '💪', step: '' },
-  { id: 'assets', label: '资产', icon: '◎', step: '' },
-  { id: 'travel', label: '旅行', icon: '✈', step: '' },
+  { id: 'goals', label: '目标', step: '01' },
+  { id: 'diary', label: '日记', step: '02' },
+  { id: 'insight', label: 'AI 洞察', step: '03' },
+  { id: 'health', label: '健康', step: '' },
+  { id: 'assets', label: '资产', step: '' },
+  { id: 'travel', label: '旅行', step: '' },
 ];
 
 interface LayoutProps {
@@ -24,62 +22,53 @@ export default function MemoirLayout({ activeTab, onTabChange, children }: Layou
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-secondary/40">
-      {/* Top nav */}
-      <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border shadow-card">
-        <div className="max-w-5xl mx-auto px-4 flex items-center justify-between h-14">
+    <div className="min-h-screen bg-background">
+      {/* Minimal top bar */}
+      <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
+        <div className="max-w-5xl mx-auto px-6 md:px-12 flex items-center justify-between h-14">
           <button
-            className="font-display text-base font-semibold text-gradient-rose"
+            className="font-display text-sm italic text-foreground hover:text-muted-foreground transition-colors"
             onClick={() => navigate('/')}
           >
             人生纪念册
           </button>
-          <div className="flex items-center gap-3">
+
+          <div className="flex items-center gap-5">
             {currentUser && (
-              <span className="font-body text-sm text-muted-foreground hidden md:block">
-                {currentUser.name} 🌸
-              </span>
+              <span className="label-sm text-muted-foreground hidden md:block">{currentUser.name}</span>
             )}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="font-body text-muted-foreground text-xs"
+            <button
+              className="label-sm text-muted-foreground hover:text-foreground transition-colors"
               onClick={() => { logout(); navigate('/'); }}
             >
               退出
-            </Button>
+            </button>
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="max-w-5xl mx-auto px-4 flex gap-1 overflow-x-auto pb-2 scrollbar-none">
+        {/* Tab bar — minimal, no background pills */}
+        <div className="max-w-5xl mx-auto px-6 md:px-12 flex gap-0 overflow-x-auto border-t border-border scrollbar-none">
           {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
               className={cn(
-                'flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-body whitespace-nowrap transition-all',
+                'flex items-center gap-1.5 px-5 py-3 label-sm whitespace-nowrap transition-all border-b-2 -mb-px',
                 activeTab === tab.id
-                  ? 'gradient-cta text-primary-foreground shadow-soft'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                  ? 'border-foreground text-foreground'
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
               )}
             >
               {tab.step && (
-                <span className={cn(
-                  'text-[10px] px-1 py-0.5 rounded font-semibold',
-                  activeTab === tab.id ? 'bg-white/20' : 'bg-primary/10 text-primary'
-                )}>
-                  {tab.step}
-                </span>
+                <span className="text-[9px] opacity-50">{tab.step}</span>
               )}
-              <span>{tab.icon}</span>
-              <span>{tab.label}</span>
+              {tab.label}
             </button>
           ))}
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-8">
+      <main className="max-w-5xl mx-auto px-6 md:px-12 py-10">
         {children}
       </main>
     </div>

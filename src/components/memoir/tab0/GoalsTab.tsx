@@ -1,24 +1,18 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Goal, GoalCategory, MemoirData } from '@/types/memoir';
 import { cn } from '@/lib/utils';
 
-const categories: { value: GoalCategory; label: string; emoji: string; color: string }[] = [
-  { value: 'health', label: '健康', emoji: '💪', color: 'bg-rose-100 text-rose-700 border-rose-200' },
-  { value: 'finance', label: '财务', emoji: '💰', color: 'bg-green-100 text-green-700 border-green-200' },
-  { value: 'learning', label: '学习', emoji: '📚', color: 'bg-blue-100 text-blue-700 border-blue-200' },
-  { value: 'travel', label: '旅行', emoji: '✈️', color: 'bg-purple-100 text-purple-700 border-purple-200' },
-  { value: 'relationship', label: '关系', emoji: '🌸', color: 'bg-pink-100 text-pink-700 border-pink-200' },
-  { value: 'other', label: '其他', emoji: '✨', color: 'bg-gray-100 text-gray-700 border-gray-200' },
+const categories: { value: GoalCategory; label: string }[] = [
+  { value: 'health', label: '健康' },
+  { value: 'finance', label: '财务' },
+  { value: 'learning', label: '学习' },
+  { value: 'travel', label: '旅行' },
+  { value: 'relationship', label: '关系' },
+  { value: 'other', label: '其他' },
 ];
-
-function getCategoryStyle(cat: GoalCategory) {
-  return categories.find(c => c.value === cat) || categories[categories.length - 1];
-}
 
 interface GoalsTabProps {
   data: MemoirData;
@@ -29,242 +23,134 @@ export default function GoalsTab({ data, onUpdate }: GoalsTabProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
   const [filterYear, setFilterYear] = useState(new Date().getFullYear());
-
   const [form, setForm] = useState<Partial<Goal>>({
-    year: new Date().getFullYear(),
-    category: 'health',
-    progress: 0,
-    title: '',
-    note: '',
+    year: new Date().getFullYear(), category: 'health', progress: 0, title: '', note: '',
   });
 
-  const years = Array.from(
-    new Set([new Date().getFullYear(), new Date().getFullYear() + 1, ...data.goals.map(g => g.year)])
-  ).sort((a, b) => b - a);
-
+  const years = Array.from(new Set([new Date().getFullYear(), new Date().getFullYear() + 1, ...data.goals.map(g => g.year)])).sort((a, b) => b - a);
   const filteredGoals = data.goals.filter(g => g.year === filterYear);
 
-  const openNew = () => {
-    setForm({ year: filterYear, category: 'health', progress: 0, title: '', note: '' });
-    setEditingGoal(null);
-    setDialogOpen(true);
-  };
-
-  const openEdit = (goal: Goal) => {
-    setForm(goal);
-    setEditingGoal(goal);
-    setDialogOpen(true);
-  };
+  const openNew = () => { setForm({ year: filterYear, category: 'health', progress: 0, title: '', note: '' }); setEditingGoal(null); setDialogOpen(true); };
+  const openEdit = (goal: Goal) => { setForm(goal); setEditingGoal(goal); setDialogOpen(true); };
 
   const saveGoal = () => {
     if (!form.title?.trim()) return;
-    const goal: Goal = {
-      id: editingGoal?.id || crypto.randomUUID(),
-      year: form.year || new Date().getFullYear(),
-      category: form.category as GoalCategory,
-      title: form.title,
-      progress: form.progress || 0,
-      note: form.note || '',
-      deadline: form.deadline,
-    };
-    const goals = editingGoal
-      ? data.goals.map(g => g.id === editingGoal.id ? goal : g)
-      : [...data.goals, goal];
+    const goal: Goal = { id: editingGoal?.id || crypto.randomUUID(), year: form.year || new Date().getFullYear(), category: form.category as GoalCategory, title: form.title, progress: form.progress || 0, note: form.note || '' };
+    const goals = editingGoal ? data.goals.map(g => g.id === editingGoal.id ? goal : g) : [...data.goals, goal];
     onUpdate({ ...data, goals });
     setDialogOpen(false);
   };
 
-  const deleteGoal = (id: string) => {
-    onUpdate({ ...data, goals: data.goals.filter(g => g.id !== id) });
-  };
-
-  const updateProgress = (id: string, progress: number) => {
-    onUpdate({
-      ...data,
-      goals: data.goals.map(g => g.id === id ? { ...g, progress } : g),
-    });
-  };
-
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div className="space-y-10">
+      <div className="flex items-end justify-between border-b border-border pb-6">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">🎯 设立目标</h2>
-          <p className="text-muted-foreground text-sm mt-1">先问自己想要什么，再出发</p>
+          <p className="label-sm text-muted-foreground mb-2">Step 01</p>
+          <h2 className="font-display text-4xl font-light italic text-foreground">设立目标</h2>
         </div>
-        <Button
-          className="gradient-cta text-white border-0 rounded-xl hover:opacity-90"
+        <button
           onClick={openNew}
+          className="label-sm border border-foreground px-6 py-2.5 hover:bg-foreground hover:text-background transition-all"
         >
-          + 添加目标
-        </Button>
+          添加目标
+        </button>
       </div>
 
-      {/* Year filter */}
-      <div className="flex gap-2 flex-wrap">
+      {/* Year tabs */}
+      <div className="flex gap-0 border-b border-border">
         {years.map(y => (
           <button
             key={y}
             onClick={() => setFilterYear(y)}
             className={cn(
-              'px-4 py-2 rounded-xl text-sm font-medium border transition-all',
-              filterYear === y
-                ? 'gradient-cta text-white border-transparent'
-                : 'border-border bg-white text-muted-foreground hover:border-primary/40'
+              'label-sm px-6 py-3 border-b-2 -mb-px transition-all',
+              filterYear === y ? 'border-foreground text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground'
             )}
           >
-            {y} 年
+            {y}
           </button>
         ))}
       </div>
 
-      {/* Goals list */}
       {filteredGoals.length === 0 ? (
-        <div className="rounded-3xl border-2 border-dashed border-border p-16 text-center">
-          <div className="text-5xl mb-4">🎯</div>
-          <p className="text-foreground font-semibold mb-2">还没有 {filterYear} 年的目标</p>
-          <p className="text-muted-foreground text-sm mb-6">先问自己想要什么，再出发</p>
-          <Button
-            className="gradient-cta text-white border-0 rounded-xl hover:opacity-90"
-            onClick={openNew}
-          >
+        <div className="py-24 text-center">
+          <p className="font-display text-5xl font-light italic text-muted-foreground/20 mb-6">先问自己<br />想要什么</p>
+          <button onClick={openNew} className="label-sm border border-border px-8 py-3 hover:border-foreground transition-all text-muted-foreground hover:text-foreground">
             设立第一个目标
-          </Button>
+          </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {filteredGoals.map(goal => {
-            const cat = getCategoryStyle(goal.category);
-            return (
-              <div
-                key={goal.id}
-                className="bg-white rounded-2xl p-5 shadow-card border border-border hover:shadow-soft transition-all"
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <span className={cn('text-xs px-2 py-1 rounded-full border font-medium', cat.color)}>
-                      {cat.emoji} {cat.label}
-                    </span>
-                  </div>
-                  <div className="flex gap-1">
-                    <button
-                      onClick={() => openEdit(goal)}
-                      className="text-xs text-muted-foreground hover:text-foreground px-2 py-1 rounded-lg hover:bg-muted transition-colors"
-                    >
-                      编辑
-                    </button>
-                    <button
-                      onClick={() => deleteGoal(goal.id)}
-                      className="text-xs text-muted-foreground hover:text-destructive px-2 py-1 rounded-lg hover:bg-destructive/10 transition-colors"
-                    >
-                      删除
-                    </button>
-                  </div>
-                </div>
-
-                <h3 className="font-semibold text-foreground text-base mb-1">{goal.title}</h3>
-                {goal.note && <p className="text-muted-foreground text-xs mb-3">{goal.note}</p>}
-
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>完成进度</span>
-                    <span className="font-semibold text-foreground">{goal.progress}%</span>
-                  </div>
-                  <Slider
-                    value={[goal.progress]}
-                    onValueChange={([v]) => updateProgress(goal.id, v)}
-                    min={0}
-                    max={100}
-                    step={5}
-                    className="cursor-pointer"
-                  />
+        <div className="divide-y divide-border">
+          {filteredGoals.map(goal => (
+            <div key={goal.id} className="py-6 grid grid-cols-12 gap-6 items-center group">
+              <div className="col-span-1">
+                <span className="label-sm text-muted-foreground/40">{categories.find(c => c.value === goal.category)?.label}</span>
+              </div>
+              <div className="col-span-6 md:col-span-7">
+                <h3 className="font-body text-base text-foreground">{goal.title}</h3>
+                {goal.note && <p className="font-body text-xs text-muted-foreground mt-1">{goal.note}</p>}
+              </div>
+              <div className="col-span-3 md:col-span-3">
+                <Slider
+                  value={[goal.progress]}
+                  onValueChange={([v]) => onUpdate({ ...data, goals: data.goals.map(g => g.id === goal.id ? { ...g, progress: v } : g) })}
+                  min={0} max={100} step={5}
+                  className="cursor-pointer"
+                />
+                <div className="flex justify-between mt-1">
+                  <span className="label-sm text-muted-foreground/50">0</span>
+                  <span className="label-sm text-muted-foreground">{goal.progress}%</span>
                 </div>
               </div>
-            );
-          })}
+              <div className="col-span-2 md:col-span-1 flex gap-2 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onClick={() => openEdit(goal)} className="label-sm text-muted-foreground hover:text-foreground">编辑</button>
+                <button onClick={() => onUpdate({ ...data, goals: data.goals.filter(g => g.id !== goal.id) })} className="label-sm text-muted-foreground hover:text-destructive">删</button>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
-      {/* Goal dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-md rounded-3xl">
+        <DialogContent className="sm:max-w-sm rounded-none border-border bg-background p-10">
           <DialogHeader>
-            <DialogTitle>{editingGoal ? '编辑目标' : '新增目标'}</DialogTitle>
+            <p className="label-sm text-muted-foreground mb-3">{editingGoal ? '编辑目标' : '新增目标'}</p>
+            <DialogTitle className="font-display text-2xl font-light italic text-foreground">
+              {editingGoal ? '修改这个目标' : '写下你想要的'}
+            </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 mt-2">
-            <div className="space-y-1.5">
-              <Label>目标标题</Label>
-              <Input
-                placeholder="例：每周运动 3 次"
-                value={form.title || ''}
-                onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-                className="rounded-xl"
-              />
+          <div className="w-8 h-px bg-foreground/20 my-6" />
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <p className="label-sm text-muted-foreground">目标</p>
+              <Input value={form.title || ''} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} placeholder="每周运动 3 次" className="rounded-none border-0 border-b border-border bg-transparent font-body text-sm focus-visible:ring-0 focus-visible:border-foreground px-0 h-9" />
             </div>
-
-            <div className="space-y-1.5">
-              <Label>年份</Label>
-              <Input
-                type="number"
-                value={form.year}
-                onChange={e => setForm(f => ({ ...f, year: parseInt(e.target.value) || new Date().getFullYear() }))}
-                className="rounded-xl"
-                min={2020}
-                max={2030}
-              />
+            <div className="space-y-2">
+              <p className="label-sm text-muted-foreground">年份</p>
+              <Input type="number" value={form.year} onChange={e => setForm(f => ({ ...f, year: parseInt(e.target.value) }))} className="rounded-none border-0 border-b border-border bg-transparent font-body text-sm focus-visible:ring-0 focus-visible:border-foreground px-0 h-9" />
             </div>
-
-            <div className="space-y-1.5">
-              <Label>类别</Label>
+            <div className="space-y-2">
+              <p className="label-sm text-muted-foreground">类别</p>
               <div className="flex flex-wrap gap-2">
                 {categories.map(cat => (
-                  <button
-                    key={cat.value}
-                    type="button"
-                    onClick={() => setForm(f => ({ ...f, category: cat.value }))}
-                    className={cn(
-                      'text-xs px-3 py-1.5 rounded-full border font-medium transition-all',
-                      form.category === cat.value ? cat.color + ' ring-2 ring-offset-1 ring-primary/30' : 'border-border text-muted-foreground hover:border-primary/40'
-                    )}
-                  >
-                    {cat.emoji} {cat.label}
+                  <button key={cat.value} type="button" onClick={() => setForm(f => ({ ...f, category: cat.value }))}
+                    className={cn('label-sm px-3 py-1.5 border transition-all', form.category === cat.value ? 'border-foreground text-foreground bg-foreground/5' : 'border-border text-muted-foreground hover:border-foreground/50')}>
+                    {cat.label}
                   </button>
                 ))}
               </div>
             </div>
-
-            <div className="space-y-1.5">
-              <Label>当前进度：{form.progress}%</Label>
-              <Slider
-                value={[form.progress || 0]}
-                onValueChange={([v]) => setForm(f => ({ ...f, progress: v }))}
-                min={0}
-                max={100}
-                step={5}
-              />
+            <div className="space-y-2">
+              <p className="label-sm text-muted-foreground">进度 {form.progress}%</p>
+              <Slider value={[form.progress || 0]} onValueChange={([v]) => setForm(f => ({ ...f, progress: v }))} min={0} max={100} step={5} />
             </div>
-
-            <div className="space-y-1.5">
-              <Label>备注（可选）</Label>
-              <Input
-                placeholder="补充说明..."
-                value={form.note || ''}
-                onChange={e => setForm(f => ({ ...f, note: e.target.value }))}
-                className="rounded-xl"
-              />
+            <div className="space-y-2">
+              <p className="label-sm text-muted-foreground">备注</p>
+              <Input value={form.note || ''} onChange={e => setForm(f => ({ ...f, note: e.target.value }))} placeholder="补充说明" className="rounded-none border-0 border-b border-border bg-transparent font-body text-sm focus-visible:ring-0 focus-visible:border-foreground px-0 h-9" />
             </div>
-
-            <div className="flex gap-2 pt-2">
-              <Button variant="outline" className="flex-1 rounded-xl" onClick={() => setDialogOpen(false)}>
-                取消
-              </Button>
-              <Button
-                className="flex-1 gradient-cta text-white border-0 rounded-xl hover:opacity-90"
-                onClick={saveGoal}
-              >
-                保存
-              </Button>
+            <div className="flex gap-3 pt-2">
+              <button onClick={() => setDialogOpen(false)} className="flex-1 label-sm border border-border py-3 text-muted-foreground hover:border-foreground hover:text-foreground transition-all">取消</button>
+              <button onClick={saveGoal} className="flex-1 label-sm border border-foreground bg-foreground text-background hover:bg-transparent hover:text-foreground py-3 transition-all">保存</button>
             </div>
           </div>
         </DialogContent>
