@@ -21,8 +21,7 @@ export default function Hero() {
 
           <h1 className="font-display text-[clamp(3rem,8.5vw,7rem)] font-bold italic leading-[0.92] text-on-dark mb-6 anim-fade-up delay-200">
             你的人生，<br />
-            值得被<br />
-            好好记录。
+            值得被好好记录。
           </h1>
 
           <p className="font-body text-lg md:text-xl text-on-dark/75 max-w-md mb-10 leading-relaxed anim-fade-up delay-400">
