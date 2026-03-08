@@ -13,8 +13,8 @@ export default function Hero() {
         <img
           src={heroImg}
           alt="A woman writing in her journal"
-          className="absolute inset-0 w-full h-full object-cover object-center"
-        />
+          className="absolute inset-0 w-full h-full object-cover object-center" />
+        
 
         {/* Layered gradient: left side darker for text legibility */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/20 to-transparent" />
@@ -39,14 +39,14 @@ export default function Hero() {
           <div className="flex items-center gap-6 anim-fade-up delay-600">
             <button
               onClick={() => setAuthOpen(true)}
-              className="font-body label-sm text-on-dark border border-white/60 hover:border-white hover:bg-white/10 transition-all px-8 py-3.5"
-            >
+              className="font-body label-sm text-on-dark border border-white/60 hover:border-white hover:bg-white/10 transition-all px-8 py-3.5">
+              
               开始记录
             </button>
             <button
               onClick={() => document.getElementById('chapters')?.scrollIntoView({ behavior: 'smooth' })}
-              className="font-body label-sm text-on-dark/70 hover:text-on-dark transition-colors flex items-center gap-2"
-            >
+              className="font-body label-sm text-on-dark/70 hover:text-on-dark transition-colors flex items-center gap-2">
+              
               了解更多 <span className="text-base">↓</span>
             </button>
           </div>
@@ -54,11 +54,11 @@ export default function Hero() {
 
         {/* Top right — product name */}
         <div className="absolute top-8 right-8 md:right-16 anim-fade-in delay-400">
-          <p className="font-display text-on-dark/80 text-sm italic">人生纪念册</p>
+          
         </div>
       </section>
 
       <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
-    </>
-  );
+    </>);
+
 }
