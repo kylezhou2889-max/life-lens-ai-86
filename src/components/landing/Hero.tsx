@@ -37,7 +37,7 @@ export default function Hero() {
             </button>
             <button
               onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-              className="font-body text-base text-on-dark/65 hover:text-on-dark transition-colors"
+              className="font-body text-base text-on-dark hover:text-on-dark/80 transition-colors"
             >
               了解功能 ↓
             </button>
