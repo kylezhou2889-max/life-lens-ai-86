@@ -1,27 +1,26 @@
 import { useState } from 'react';
 import AuthModal from './AuthModal';
-import heroImg from '@/assets/hero-journal.jpg';
+import heroImg from '@/assets/hero-illustration.png';
 
 export default function Hero() {
   const [authOpen, setAuthOpen] = useState(false);
 
   return (
     <>
-      <section className="relative w-full h-screen min-h-[680px] overflow-hidden">
-        {/* Background image */}
+      <section className="relative w-full h-screen min-h-[680px] overflow-hidden bg-gradient-to-br from-pink-50 via-rose-50 to-orange-50">
+        {/* Background illustration */}
         <img
           src={heroImg}
           alt="A woman writing in her journal"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
 
-        {/* Gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/25 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+        {/* Subtle gradient for text readability on left */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/15 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
 
         {/* Hero content */}
         <div className="absolute bottom-0 left-0 right-0 px-8 md:px-20 pb-20 md:pb-28">
-          {/* Tag */}
           <div className="anim-fade-up mb-6">
             <span className="tag-pill bg-white/15 text-white/90 border border-white/25 backdrop-blur-sm">
               ✨ AI 驱动的人生记录本
@@ -48,24 +47,10 @@ export default function Hero() {
             </button>
             <button
               onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-              className="font-body text-base text-on-dark/70 hover:text-on-dark transition-colors flex items-center gap-2"
+              className="font-body text-base text-on-dark/70 hover:text-on-dark transition-colors"
             >
               了解功能 ↓
             </button>
-          </div>
-
-          {/* Social proof */}
-          <div className="mt-10 flex items-center gap-6 anim-fade-up delay-800">
-            <div className="flex -space-x-2">
-              {['🌸', '⭐', '💫', '🌿'].map((e, i) => (
-                <div key={i} className="w-8 h-8 rounded-full bg-white/20 border border-white/30 flex items-center justify-center text-sm backdrop-blur-sm">
-                  {e}
-                </div>
-              ))}
-            </div>
-            <p className="font-body text-sm text-on-dark/70">
-              已有 <span className="text-on-dark font-semibold">1,200+</span> 位女性开始记录她们的人生
-            </p>
           </div>
         </div>
       </section>
