@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/useAuth';
@@ -42,51 +41,45 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md rounded-3xl border-border bg-card">
-        {/* Decorative top accent */}
-        <div className="absolute top-0 left-8 right-8 h-0.5 rounded-full gradient-cta opacity-60" />
-
-        <DialogHeader className="pt-2">
-          <div className="text-center mb-1">
-            <span className="text-3xl">{mode === 'register' ? '🌸' : '✦'}</span>
-          </div>
-          <DialogTitle className="font-display text-2xl font-semibold text-center text-foreground">
-            {mode === 'register' ? '创建你的纪念册' : '欢迎回来'}
-          </DialogTitle>
-          <p className="text-center text-muted-foreground font-body text-sm mt-1 italic">
-            {mode === 'register'
-              ? '开始记录属于你的人生故事'
-              : '继续你未完成的旅程'}
+      <DialogContent className="sm:max-w-sm rounded-none border-border bg-background p-10">
+        <DialogHeader>
+          <p className="label-sm text-muted-foreground mb-3">
+            {mode === 'register' ? '创建账户' : '欢迎回来'}
           </p>
+          <DialogTitle className="font-display text-3xl font-light italic text-foreground leading-tight">
+            {mode === 'register' ? '开始记录\n你的人生' : '继续你的\n旅程'}
+          </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4 mt-2">
+        <div className="w-8 h-px bg-foreground/20 my-6" />
+
+        <form onSubmit={handleSubmit} className="space-y-5">
           {mode === 'register' && (
             <div className="space-y-1.5">
-              <Label className="font-body text-xs text-muted-foreground uppercase tracking-wider">你的名字</Label>
+              <Label className="label-sm text-muted-foreground">你的名字</Label>
               <Input
-                placeholder="叫我什么好呢？"
+                placeholder="叫我什么好呢"
                 value={name}
                 onChange={e => setName(e.target.value)}
-                className="rounded-xl font-body"
+                className="rounded-none border-0 border-b border-border bg-transparent font-body text-sm focus-visible:ring-0 focus-visible:border-foreground px-0 h-9"
               />
             </div>
           )}
 
           <div className="space-y-1.5">
-            <Label className="font-body text-xs text-muted-foreground uppercase tracking-wider">邮箱</Label>
+            <Label className="label-sm text-muted-foreground">邮箱</Label>
             <Input
               type="email"
               placeholder="your@email.com"
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
-              className="rounded-xl font-body"
+              className="rounded-none border-0 border-b border-border bg-transparent font-body text-sm focus-visible:ring-0 focus-visible:border-foreground px-0 h-9"
             />
           </div>
 
           <div className="space-y-1.5">
-            <Label className="font-body text-xs text-muted-foreground uppercase tracking-wider">密码</Label>
+            <Label className="label-sm text-muted-foreground">密码</Label>
             <Input
               type="password"
               placeholder="至少 6 位"
@@ -94,28 +87,27 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
               onChange={e => setPassword(e.target.value)}
               required
               minLength={6}
-              className="rounded-xl font-body"
+              className="rounded-none border-0 border-b border-border bg-transparent font-body text-sm focus-visible:ring-0 focus-visible:border-foreground px-0 h-9"
             />
           </div>
 
-          {error && (
-            <p className="text-destructive text-sm text-center font-body">{error}</p>
-          )}
+          {error && <p className="font-body text-xs text-destructive">{error}</p>}
 
-          <Button
-            type="submit"
-            className="w-full gradient-cta text-primary-foreground border-0 rounded-xl py-5 text-base font-body hover:opacity-90"
-            disabled={loading}
-          >
-            {loading ? '…' : mode === 'register' ? '开始我的旅程 →' : '进入纪念册 →'}
-          </Button>
+          <div className="pt-4">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full font-body label-sm border border-foreground bg-foreground text-background hover:bg-transparent hover:text-foreground transition-all py-3.5"
+            >
+              {loading ? '…' : mode === 'register' ? '创建纪念册' : '进入纪念册'}
+            </button>
+          </div>
 
-          <p className="text-center text-sm text-muted-foreground font-body">
+          <p className="font-body text-xs text-muted-foreground text-center">
             {mode === 'register' ? '已有账号？' : '还没有账号？'}
-            {' '}
             <button
               type="button"
-              className="text-primary hover:underline font-medium"
+              className="ml-1 underline text-foreground"
               onClick={() => { setMode(mode === 'register' ? 'login' : 'register'); setError(''); }}
             >
               {mode === 'register' ? '登录' : '注册'}

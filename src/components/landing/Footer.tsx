@@ -1,48 +1,36 @@
 export default function Footer() {
   return (
-    <footer className="py-16 px-6 border-t border-border bg-background">
+    <footer className="border-t border-border py-16 px-8 md:px-16 bg-background">
       <div className="max-w-5xl mx-auto">
-        {/* Top: logo + links */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">
-          <div className="max-w-xs">
-            <div className="font-display text-2xl font-semibold text-gradient-rose mb-2">
-              我的人生纪念册
-            </div>
-            <p className="font-body text-sm text-muted-foreground leading-relaxed italic">
-              为每一个认真活着、勇敢追求自己人生的她而生。
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
+          <div className="col-span-2 md:col-span-1">
+            <p className="font-display text-xl italic text-foreground mb-3">人生纪念册</p>
+            <p className="font-body text-xs text-muted-foreground leading-relaxed">
+              为每一个认真生活、<br />勇敢做自己的她而生。
             </p>
           </div>
-
-          <div className="flex gap-10 text-sm">
-            <div className="space-y-2">
-              <p className="font-display font-semibold text-foreground text-xs uppercase tracking-wider mb-3">功能</p>
-              {['设立目标', '写日记', 'AI 分析', '健康记录'].map(t => (
-                <p key={t} className="font-body text-muted-foreground hover:text-foreground cursor-pointer transition-colors">{t}</p>
-              ))}
+          {[
+            { title: '功能', links: ['设立目标', '写日记', 'AI 洞察', '健康记录', '旅行足迹'] },
+            { title: '产品', links: ['产品理念', '如何使用', '常见问题'] },
+            { title: '关于', links: ['隐私政策', '使用条款', '联系我们'] },
+          ].map((col, i) => (
+            <div key={i}>
+              <p className="label-sm text-foreground mb-5">{col.title}</p>
+              <div className="space-y-3">
+                {col.links.map(l => (
+                  <p key={l} className="font-body text-xs text-muted-foreground hover:text-foreground cursor-pointer transition-colors">{l}</p>
+                ))}
+              </div>
             </div>
-            <div className="space-y-2">
-              <p className="font-display font-semibold text-foreground text-xs uppercase tracking-wider mb-3">关于</p>
-              {['产品理念', '隐私政策', '使用条款', '联系我们'].map(t => (
-                <p key={t} className="font-body text-muted-foreground hover:text-foreground cursor-pointer transition-colors">{t}</p>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
 
-        {/* Divider with botanical ornament */}
-        <div className="flex items-center gap-4 mb-8">
-          <div className="h-px flex-1 bg-border" />
-          <span className="text-muted-foreground/30 text-sm">❀ ✦ ❀</span>
-          <div className="h-px flex-1 bg-border" />
-        </div>
-
-        {/* Bottom: quote + copyright */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-body text-xs text-muted-foreground italic text-center md:text-left">
+        <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="font-display text-sm italic text-muted-foreground">
             "你愿意记录自己的故事，本身就是一种勇气。"
           </p>
-          <p className="font-body text-xs text-muted-foreground">
-            © 2025 人生纪念册 · Made with 🌸 & AI
+          <p className="label-sm text-muted-foreground">
+            © 2025 人生纪念册
           </p>
         </div>
       </div>
