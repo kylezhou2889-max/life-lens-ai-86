@@ -14,7 +14,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename="/life-lens-ai-86">
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/app" element={<MemoirApp />} />
