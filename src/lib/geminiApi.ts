@@ -1,8 +1,12 @@
 // Google Gemini API integration
-// API key provided by user for personal use
-const GEMINI_API_KEY = 'AIzaSyDIFcilCeE-QoHxRYNzENrdDtFgCCD5Ltw';
+// API key should be provided via environment variable VITE_GEMINI_API_KEY
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 const GEMINI_MODEL = 'gemini-3-flash-preview';
 const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+
+if (!GEMINI_API_KEY) {
+  console.error('Error: VITE_GEMINI_API_KEY environment variable is not set. Please configure your .env file with your Gemini API key.');
+}
 
 interface GeminiPart {
   text?: string;
